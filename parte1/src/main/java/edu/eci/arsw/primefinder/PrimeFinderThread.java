@@ -7,13 +7,14 @@ public class PrimeFinderThread extends Thread{
 
 	
 	int a,b;
-	
+	boolean wait;
 	private List<Integer> primes=new LinkedList<Integer>();
 	
 	public PrimeFinderThread(int a, int b) {
 		super();
 		this.a = a;
 		this.b = b;
+		wait = false;
 	}
 
 	public void run(){
@@ -38,6 +39,16 @@ public class PrimeFinderThread extends Thread{
 
 	public List<Integer> getPrimes() {
 		return primes;
+	}
+	
+	public void setWait(boolean wait) {
+		this.wait = wait;
+	}
+	
+	public void espere() {
+		while (wait) {
+			sleep(100000);
+		}
 	}
 	
 	
