@@ -18,11 +18,16 @@ public class PrimeFinderThread extends Thread{
 	}
 
 	public void run(){
-		for (int i=a;i<=b;i++){						
+		for (int i=a;i<=b;i++){
+			while (wait) {
+					//El hilo espera hasta que la variable wait cambie su valor.
+			}
 			if (isPrime(i)){
 				primes.add(i);
 				System.out.println(i);
 			}
+			
+			
 		}
 		
 		
@@ -45,11 +50,6 @@ public class PrimeFinderThread extends Thread{
 		this.wait = wait;
 	}
 	
-	public void espere() {
-		while (wait) {
-			sleep(100000);
-		}
-	}
 	
 	
 	

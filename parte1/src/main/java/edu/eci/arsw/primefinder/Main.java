@@ -25,10 +25,10 @@ public class Main extends JPanel {
 		PrimeFinderThread pft=new PrimeFinderThread(0, 10000000);
 		PrimeFinderThread ft=new PrimeFinderThread(10000001, 20000000);
 		PrimeFinderThread pt=new PrimeFinderThread(20000001, 30000000);
-		Main m = new Main(pft, ft, pt);
 		TimedTaskJose tk =  new TimedTaskJose(pft, ft, pt);
 		Timer t =  new Timer();
-		t.schedule(tk,  5000);
+		t.schedule(tk,  1000);
+		Main m = new Main(pft, ft, pt);
 		JFrame frame = new JFrame("");
 		frame.add(m);
 		frame.setSize(1, 1);
@@ -36,11 +36,6 @@ public class Main extends JPanel {
 		pft.start();
 		ft.start();
 		pt.start();
-		
-		
-		
-
-	
 		
 	}
 }
@@ -57,24 +52,21 @@ class TimedTaskJose extends TimerTask{
 
 	@Override
 	public void run() {
-		uno.setWait(false);
-		dos.setWait(false);
-		tres.setWait(false);
-		uno.espere();
-		dos.espere();
-		tres.espere();
-
-		
-		System.out.println("Hilos pausados");
-		
+		uno.setWait(true);
+		dos.setWait(true);
+		tres.setWait(true);
 	}
 	
 }
 
 class MyKeyListener implements KeyListener{
+	PrimeFinderThread uno;
+	PrimeFinderThread dos;
+	PrimeFinderThread tres;
 	public MyKeyListener(PrimeFinderThread ft, PrimeFinderThread pft, PrimeFinderThread pt) {
-		
-		
+		uno = ft;
+		dos = pt;
+		tres = pft;
 	}
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -83,7 +75,9 @@ class MyKeyListener implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(KeyEvent.getKeyText(e.getKeyCode()) == "Enter") {
-			System.out.println("Presiono enter");
+			uno.setWait(false);
+			dos.setWait(false);
+			tres.setWait(false);
 		}
 	}
 
