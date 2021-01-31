@@ -83,7 +83,7 @@ Parte III
 	obtuviera el resultado adecuado:
 	~~~
 	![casoPrueba1](https://github.com/JoseGutierrezMairn/ARSW-Lab2/blob/master/img/media/casoPrueba.PNG?raw=true)
-	![casoPrueba2](https://github.com/JoseGutierrezMairn/ARSW-Lab2/blob/master/img/media/casoPrueba1.PNG?raw=true)
+	![casoPrueba2](https://github.com/JoseGutierrezMairn/ARSW-Lab2/blob/master/img/media/casoPrueba2.PNG?raw=true)
 	
 	~~~
 	Finalmente esta es la propuesta para evitar las condiciones  
