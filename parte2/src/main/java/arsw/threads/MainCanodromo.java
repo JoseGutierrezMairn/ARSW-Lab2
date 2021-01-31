@@ -2,6 +2,8 @@ package arsw.threads;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Semaphore;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 
@@ -10,8 +12,10 @@ public class MainCanodromo {
     private static Galgo[] galgos;
 
     private static Canodromo can;
-
+    private static RegistroAvanceTotal rat = new RegistroAvanceTotal();
     private static RegistroLlegada reg = new RegistroLlegada();
+    private static Semaphore mutex = new Semaphore(1);
+    
 
     public static void main(String[] args) {
         can = new Canodromo(17, 100);
@@ -33,10 +37,17 @@ public class MainCanodromo {
                             public void run() {
                                 for (int i = 0; i < can.getNumCarriles(); i++) {
                                     //crea los hilos 'galgos'
-                                    galgos[i] = new Galgo(can.getCarril(i), "" + i, reg);
+                                    galgos[i] = new Galgo(can.getCarril(i), "" + i, reg, mutex, rat);
                                     //inicia los hilos
                                     galgos[i].start();
 
+                                }
+                                for (Galgo g : galgos) {
+                                	try {
+										g.join();
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
                                 }
                                
 				can.winnerDialog(reg.getGanador(),reg.getUltimaPosicionAlcanzada() - 1); 
@@ -52,6 +63,7 @@ public class MainCanodromo {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                    	rat.setBlocked(true);
                         System.out.println("Carrera pausada!");
                     }
                 }
@@ -61,6 +73,7 @@ public class MainCanodromo {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                    	rat.setBlocked(false);
                         System.out.println("Carrera reanudada!");
                     }
                 }

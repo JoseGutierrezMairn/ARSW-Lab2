@@ -52,20 +52,84 @@ Parte III
     a.  La acción de iniciar la carrera y mostrar los resultados se realiza a partir de la línea 38 de MainCanodromo.
 
     b.  Puede utilizarse el método join() de la clase Thread para sincronizar el hilo que inicia la carrera, con la finalización de los hilos de los galgos.
-
+	
+	~~~
+	La solución propuesta se encuentra en la clase MainCanodromo, donde se busca  
+	hacer join entre los hilos con el proceso principal, así éste los esperará  
+	a que completen sus respectivas funciones.
+	~~~
 2.  Una vez corregido el problema inicial, corra la aplicación varias
     veces, e identifique las inconsistencias en los resultados de las
     mismas viendo el ‘ranking’ mostrado en consola (algunas veces
     podrían salir resultados válidos, pero en otros se pueden presentar
     dichas inconsistencias). A partir de esto, identifique las regiones
     críticas () del programa.
-
+	~~~
+	La región critica se encuentra en la clase Galgo, en el método  
+	corra() en las líneas donde se consutlala última posición alcanzada  
+	y cuando se cambia la última posición alcanzada en la clase  
+	RegistroLLegada, la propuesta es bloquear esas líneas usando la clase
+	Semaphore, para evitar las condiciones de carrera en el programa.
+	~~~
+	![CondiciónCarrera](https://github.com/JoseGutierrezMairn/ARSW-Lab2/blob/master/img/media/regionCritica.PNG?raw=true)
 3.  Utilice un mecanismo de sincronización para garantizar que a dichas
     regiones críticas sólo acceda un hilo a la vez. Verifique los
     resultados.
+	
+	~~~
+	Después de probar la propuesta para evitar las condiciones  
+	de carrera el resultado fue el esperado, esta imagen es de  
+	una de las pruebas que se hizo para comprobar que se  
+	obtuviera el resultado adecuado:
+	~~~
+	![casoPrueba1](https://github.com/JoseGutierrezMairn/ARSW-Lab2/blob/master/img/media/casoPrueba.PNG?raw=true)
+	![casoPrueba2](https://github.com/JoseGutierrezMairn/ARSW-Lab2/blob/master/img/media/casoPrueba1.PNG?raw=true)
+	
+	~~~
+	Finalmente esta es la propuesta para evitar las condiciones  
+	de carrera en el programa:
+	~~~
+	
+	```
+	public void corra() throws InterruptedException {
+		while (paso < carril.size()) {			
+			Thread.sleep(100);
+			carril.setPasoOn(paso++);
+			carril.displayPasos(paso);
+			int ubicacion = 0;
+			if (paso == carril.size()) {						
+				carril.finish();
+				try {
+					mutex.acquire();
+					ubicacion=regl.getUltimaPosicionAlcanzada();
+					regl.setUltimaPosicionAlcanzada(ubicacion+1);
+					System.out.println("El galgo "+this.getName()+" llego en la posicion "+ubicacion);
+				}finally {
+					mutex.release();
+				}
+				
+				if (ubicacion==1){
+					regl.setGanador(this.getName());
+				}
+				
+			}
+		}
+	}
+	```
 
 4.  Implemente las funcionalidades de pausa y continuar. Con estas,
     cuando se haga clic en ‘Stop’, todos los hilos de los galgos
     deberían dormirse, y cuando se haga clic en ‘Continue’ los mismos
     deberían despertarse y continuar con la carrera. Diseñe una solución que permita hacer esto utilizando los mecanismos de sincronización con las primitivas de los Locks provistos por el lenguaje (wait y notifyAll).
 
+~~~
+Las funcionalidades de pausa y continuar fueron exitosamente
+implementadas.
+A continuación una prueba sencilla donde se evidencia
+el buen funcionamiento de las funcionalidades pausa  
+y continuar:
+~~~
+![pausa](https://github.com/JoseGutierrezMairn/ARSW-Lab2/blob/master/img/media/pausa.PNG?raw=true)
+![continuar](https://github.com/JoseGutierrezMairn/ARSW-Lab2/blob/master/img/media/continuar.PNG?raw=true)
+![completo](https://github.com/JoseGutierrezMairn/ARSW-Lab2/blob/master/img/media/completo.PNG?raw=true)
+![completo2](https://github.com/JoseGutierrezMairn/ARSW-Lab2/blob/master/img/media/completo2.PNG?raw=true)

@@ -20,6 +20,11 @@ public class PrimeFinderThread extends Thread{
 	public void run(){
 		for (int i=a;i<=b;i++){
 			while (wait) {
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 					//El hilo espera hasta que la variable wait cambie su valor.
 			}
 			if (isPrime(i)){

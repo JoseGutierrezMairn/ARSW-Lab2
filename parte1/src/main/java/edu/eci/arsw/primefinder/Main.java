@@ -25,14 +25,14 @@ public class Main extends JPanel {
 		PrimeFinderThread pft=new PrimeFinderThread(0, 10000000);
 		PrimeFinderThread ft=new PrimeFinderThread(10000001, 20000000);
 		PrimeFinderThread pt=new PrimeFinderThread(20000001, 30000000);
-		TimedTaskJose tk =  new TimedTaskJose(pft, ft, pt);
+		/***TimedTaskJose tk =  new TimedTaskJose(pft, ft, pt);
 		Timer t =  new Timer();
 		t.schedule(tk,  1000);
 		Main m = new Main(pft, ft, pt);
 		JFrame frame = new JFrame("");
 		frame.add(m);
 		frame.setSize(1, 1);
-		frame.setVisible(true);
+		frame.setVisible(true);***/
 		pft.start();
 		ft.start();
 		pt.start();
@@ -52,9 +52,12 @@ class TimedTaskJose extends TimerTask{
 
 	@Override
 	public void run() {
+		int answ = 0;
+		answ+= uno.getPrimes().size() + dos.getPrimes().size() + tres.getPrimes().size();
 		uno.setWait(true);
 		dos.setWait(true);
 		tres.setWait(true);
+		System.out.println("Total de números primos encontrados hasta el momento: " + answ);
 	}
 	
 }
@@ -78,6 +81,7 @@ class MyKeyListener implements KeyListener{
 			uno.setWait(false);
 			dos.setWait(false);
 			tres.setWait(false);
+			
 		}
 	}
 

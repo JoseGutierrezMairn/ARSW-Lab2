@@ -56,6 +56,7 @@ public class Carril {
 	public int size() {
 		return paso.length;
 	}
+	
 
 	public String getName() {
 		return llegada.getText();
@@ -95,6 +96,7 @@ public class Carril {
 	 * @param i
 	 */
 	public void setPasoOff(int i) {
+		
 		paso[i].setText("");
 	}
 
